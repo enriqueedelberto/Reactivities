@@ -1,3 +1,4 @@
+using Application.Activities.Commands;
 using Application.Activities.Queries;
 using Domain;
 using MediatR;
@@ -6,7 +7,7 @@ using Persistence;
 
 namespace API.Controllers;
 
-public class ActivitiesController: BaseApiController
+public class ActivitiesController : BaseApiController
 {
 
     [HttpGet]
@@ -21,5 +22,11 @@ public class ActivitiesController: BaseApiController
         //Use existing mediator
         return await Mediator.Send(new GetActivityDetail.Query { Id = id });
     }
-    
-  } 
+
+    [HttpPost]
+    public async Task<ActionResult<string>> CreateActivity(Activity activity)
+    {
+        return await Mediator.Send(new CreateActivity.Command { Activity = activity });
+    }
+
+  }

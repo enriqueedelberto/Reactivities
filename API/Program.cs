@@ -1,5 +1,7 @@
-using Application.Activities.Queries;
+using Application.Activities.Queries;   
+using Application.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,8 +16,11 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 builder.Services.AddCors();
 
- // Registers MediatR and scans for handlers in the assembly containing GetActivityList.Handler
+// Registers MediatR and scans for handlers in the assembly containing GetActivityList.Handler
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
+
+//Add automapper with the version 15.0.1 details 
+ builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
 var app = builder.Build();
 

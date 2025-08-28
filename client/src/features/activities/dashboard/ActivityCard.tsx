@@ -2,9 +2,10 @@ import { Button, Card, CardActions, CardContent, Chip, Typography } from "@mui/m
 
 type Props = {
   activity: Activity;
+  selectActivity:(id: string) => void;
 };
 
-function ActivityCard({ activity }: Props) {
+function ActivityCard({ activity, selectActivity }: Props) {
   return (
     <Card sx={{ borderRadius: 3 }}>
       <CardContent>
@@ -17,7 +18,7 @@ function ActivityCard({ activity }: Props) {
       </CardContent>
       <CardActions sx={{display:'flex', justifyContent: 'space-between', pb: 2}}>
         <Chip label={activity.category} variant="outlined" /> 
-        <Button size="medium">View</Button>
+        <Button onClick={() => selectActivity(activity.id)} size="medium">View</Button>
       </CardActions>
     </Card>
   );

@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react"; 
 import CssBaseline from '@mui/material/CssBaseline';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import axios from 'axios';
 import NavBar from './NavBar';
 import { Box, Container } from "@mui/material";
@@ -11,6 +9,7 @@ import ActivityDashboard from "../../features/activities/dashboard/ActivityDashb
  function App() {
   const title = 'Welcome to Reactivities';
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>();
 
   useEffect(() => { 
 
@@ -22,12 +21,25 @@ import ActivityDashboard from "../../features/activities/dashboard/ActivityDashb
       return () => { }
   }, []);
 
+  const handleSelectActivity = (id: string) =>{
+     setSelectedActivity(activities.find(x => x.id == id));
+  }
+
+  const handleCancelSelectActivity = () =>{
+     setSelectedActivity(undefined);
+  }
+
   return ( 
     <Box sx={{bgcolor:'#eeeeee'}}>
     <CssBaseline />
       <NavBar />
       <Container maxWidth='xl' sx={{mt: 3}}>
-        <ActivityDashboard activities={activities}/>
+        <ActivityDashboard 
+        activities={activities}
+        selectActivity={handleSelectActivity}
+        cancelSelectActivity={handleCancelSelectActivity}
+        selectedActivity={selectedActivity}
+        />
       </Container>
        
     </Box>   

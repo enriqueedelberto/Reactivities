@@ -1,15 +1,27 @@
 import { Grid } from "@mui/material";
 import ActivityList from "./ActivityList";
+import ActivityDetail from "../details/ActivityDetail";
 
 type Props = {
- activities: Activity[]
+ activities: Activity[];
+ selectActivity: (id: string) => void;
+ cancelSelectActivity: () => void;
+selectedActivity?: Activity;
 }
 
-function ActivityDashboard({ activities }: Props) {
+function ActivityDashboard(
+                    { activities, selectActivity, cancelSelectActivity,selectedActivity }: Props) {
   return (
-    <Grid container>
-      <Grid size={9}> 
-        <ActivityList activities={ activities } />
+    <Grid container spacing={3}>
+      <Grid size={7}> 
+        <ActivityList 
+            activities={ activities }
+            selectActivity={selectActivity} />
+      </Grid> 
+      <Grid size={5}> 
+         { selectedActivity &&  <ActivityDetail 
+              activity={selectedActivity}
+              cancelSelectActivity={cancelSelectActivity} /> }
       </Grid>
     </Grid>
   );

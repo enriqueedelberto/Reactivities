@@ -35,7 +35,7 @@ function ActivityDashboard({
       <Grid size={5}>
         {selectedActivity &&  !editMode && 
           <ActivityDetail
-            activity={selectedActivity}
+            selectedActivity={selectedActivity}
             cancelSelectActivity={cancelSelectActivity}
             openForm={openForm}
           />

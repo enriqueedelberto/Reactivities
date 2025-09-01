@@ -1,40 +1,15 @@
 import {   useState } from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import axios from "axios";
+import CssBaseline from "@mui/material/CssBaseline"; 
 import NavBar from "./NavBar";
 import { Box, Container, Typography } from "@mui/material";
-import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
-import { useQuery } from "@tanstack/react-query";
+import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard"; 
 import { useActivities } from "../../lib/hooks/useActivities";
 
-function App() {
-  const title = "Welcome to Reactivities";
-  // const [activities, setActivities] = useState<Activity[]>([]);
+function App() {  
   const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>();
   const [editMode, setEditMode] = useState(false);
-  // const {activities, isPending} = useActivities();
-
-  // useEffect(() => {
-
-  //     //Fetch data from 'https://localhost.com' using axios
-  //     axios.get<Activity[]>('https://localhost:5145/api/activities')
-  //       .then(response => setActivities(response.data))
-  //       .catch(error => console.error('Error fetching activities:', error));
-
-  //     return () => { }
-  // }, []);
-
-  const { data: activities, isPending } = useQuery({
-    queryKey: ["activities"],
-    queryFn: async () => {
-      const response = await axios.get<Activity[]>(
-        "https://localhost:5145/api/activities"
-      );
-      return response.data;
-    },
-  });
-
-
+  const {activities, isPending} = useActivities();
+ 
 
   const handleSelectActivity = (id: string) => {
     setSelectedActivity(activities!.find((x) => x.id == id));

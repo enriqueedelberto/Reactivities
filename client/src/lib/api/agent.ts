@@ -1,4 +1,3 @@
-import { Try } from "@mui/icons-material";
 import axios from "axios";
 
 const sleep = (delay: number) =>{
@@ -8,7 +7,7 @@ const sleep = (delay: number) =>{
 };
 
 const agent = axios.create({
-    baseURL: 'https://localhost:5145/api'
+    baseURL: import.meta.env.VITE_API_URL
 });
 
 agent.interceptors.response.use(async response => {

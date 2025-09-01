@@ -10,9 +10,7 @@ type Props = {
   selectedActivity?: Activity;
   openForm: (id: string) => void;
   closeForm: () => void;
-  editMode: boolean;
-  submitForm: (activity: Activity ) => void;
-  deleteActivity: (id: string) => void;
+  editMode: boolean;  
 };
 
 function ActivityDashboard({
@@ -22,30 +20,26 @@ function ActivityDashboard({
   selectedActivity,
   openForm,
   closeForm,
-   editMode,
-   submitForm,
-   deleteActivity
+   editMode 
 }: Props) {
   return (
     <Grid container spacing={3}>
       <Grid size={7}>
         <ActivityList activities={activities} 
-          selectActivity={selectActivity} 
-          deleteActivity={deleteActivity}
+          selectActivity={selectActivity}  
          />
       </Grid>
       <Grid size={5}>
         {selectedActivity &&  !editMode && 
           <ActivityDetail
-            activity={selectedActivity}
+            selectedActivity={selectedActivity}
             cancelSelectActivity={cancelSelectActivity}
             openForm={openForm}
           />
          }
          {editMode &&  
          <ActivityForm 
-               closeForm={closeForm}  activity={selectedActivity} 
-               submitForm={submitForm} 
+               closeForm={closeForm}  activity={selectedActivity}  
           />}
       </Grid>
     </Grid>

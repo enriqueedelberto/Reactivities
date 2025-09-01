@@ -8,7 +8,7 @@ type Props = {
 };
 
 function ActivityForm({ activity, closeForm }: Props) {
-  const { updateActivity } = useActivities();
+  const { updateActivity, createActivity } = useActivities();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -22,7 +22,10 @@ function ActivityForm({ activity, closeForm }: Props) {
 
     if (activity) {
       data.id = activity.id;
-      await updateActivity.mutate(data as unknown as Activity);
+      await updateActivity.mutateAsync(data as unknown as Activity);
+      closeForm();
+    } else {
+      await createActivity.mutateAsync(data as unknown as Activity);
       closeForm();
     }
 
@@ -59,22 +62,27 @@ function ActivityForm({ activity, closeForm }: Props) {
           name="date"
           label="Date"
           type="date"
-          defaultValue={activity?.date
-            ? new Date(activity.date).toISOString().split('T')[0]
-            : new Date().toISOString().split('T')[0]
+          defaultValue={
+            activity?.date
+              ? new Date(activity.date).toISOString().split("T")[0]
+              : new Date().toISOString().split("T")[0]
           }
         />
         <TextField name="city" label="City" defaultValue={activity?.city} />
         <TextField name="venue" label="Venue" defaultValue={activity?.venue} />
 
         <Box display="flex" justifyContent="end" gap={3}>
-          <Button color="inherit" onClick={closeForm}>Cancel</Button>
-          <Button 
-              type="submit" 
-              color="success" 
-              variant="contained"
-              disabled={updateActivity.isPending}
-              >Submit</Button>
+          <Button color="inherit" onClick={closeForm}>
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            color="success"
+            variant="contained"
+            disabled={updateActivity.isPending || createActivity.isPending}
+          >
+            Submit
+          </Button>
         </Box>
       </Box>
     </Paper>

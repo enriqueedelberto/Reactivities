@@ -3,13 +3,10 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography"; 
 import { Box, Button, Container, MenuItem } from "@mui/material"; 
 import { Group } from "@mui/icons-material";
-
-type Props = {
-   openForm: () => void;
-};
+ 
 
 // Add NavBar component
-export default function NavBar({openForm} : Props) {
+export default function NavBar( ) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -38,7 +35,7 @@ export default function NavBar({openForm} : Props) {
                  </MenuItem>
 
              </Box>
-             <Button size="large" variant="contained" color="warning" onClick={openForm}>Create activity</Button>
+             <Button size="large" variant="contained" color="warning" onClick={() =>{} }>Create activity</Button>
           </Toolbar>
         </Container>
       </AppBar>

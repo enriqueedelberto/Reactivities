@@ -1,9 +1,8 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Application.Activities.DTOs;
 
-public class CreateActivityDto : BaseActivityDto
+public class BaseActivityDto
 { 
     public string Title { get; set; } = string.Empty;
  
@@ -22,4 +21,5 @@ public class CreateActivityDto : BaseActivityDto
     public double Latitude { get; set; }
  
     public double Longitude { get; set; }
+
 }

@@ -21,7 +21,7 @@ public class ActivitiesController : BaseApiController
     public async Task<ActionResult<Activity>> GetActivityDetail(string id)
     {
         //Use existing mediator
-        return await Mediator.Send(new GetActivityDetail.Query { Id = id });
+        return HandleResult(await Mediator.Send(new GetActivityDetail.Query { Id = id })); 
     }
 
     [HttpPost]

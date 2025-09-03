@@ -5,6 +5,7 @@ using Application.Core;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using Persistence;
+using API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,10 +39,14 @@ builder.Services.AddAutoMapper(cfg =>
 });
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
+builder.Services.AddTransient<ExceptionMiddleware>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseMiddleware<ExceptionMiddleware>();
+
 //Use CORS
 app.UseCors(policy =>
 {

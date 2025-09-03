@@ -1,4 +1,5 @@
 using System;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Persistence;
@@ -12,7 +13,7 @@ public class EditActivity : IRequest<string>
         public required Activity Activity { get; set; }
     }
 
-    public class Handler (AppDbContext context): IRequestHandler<Command, string>
+    public class Handler (AppDbContext context, IMapper mapper): IRequestHandler<Command, string>
     {  
         public async Task<string> Handle(Command request, CancellationToken cancellationToken)
         {

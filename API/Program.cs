@@ -1,5 +1,8 @@
+using System.Reflection;
 using Application.Activities.Queries;
+using Application.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,8 +17,20 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 builder.Services.AddCors();
 
- // Registers MediatR and scans for handlers in the assembly containing GetActivityList.Handler
+// Registers MediatR and scans for handlers in the assembly containing GetActivityList.Handler
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
+
+builder.Services.AddAutoMapper(cfg =>
+{
+    // Option 1: Explicitly add a profile
+        cfg.AddProfile(new MappingProfiles()); 
+
+        // Option 2: Scan the current assembly for profiles
+        cfg.AddMaps(Assembly.GetExecutingAssembly()); 
+
+        // Option 3: Scan a specific assembly for profiles
+        cfg.AddMaps(typeof(MappingProfiles).Assembly); 
+});
 
 var app = builder.Build();
 

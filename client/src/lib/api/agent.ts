@@ -20,11 +20,47 @@ agent.interceptors.response.use(config =>{
 agent.interceptors.response.use(async response => {
   try {
     await sleep(1000);
-    
-
+    store.uiStore.isIdle();
     return response;
-  } catch (error) {
-    console.log(error);
+  },
+  async error => {
+    await sleep(1000);
+    store.uiStore.isIdle();
+
+    const { status, data } = error.response;
+
+    switch (status) {
+      case 400:
+        if(data.errors){
+          const modelStateErrors = [];
+          for (const key in data.errors) {
+            modelStateErrors.push(data.errors[key]);
+          }
+          throw modelStateErrors.flat();
+        }
+        else{
+          toast.error(data);
+        }
+        
+        break;
+
+      case 401:
+        toast.error('Unauthorized access - perhaps you need to log in?');
+        break;
+
+      case 404:
+        router.navigate('/not-found');
+        break;
+
+      case 500:
+        toast.error('Server error - please try again later.');
+        break;
+
+      default:
+        break;
+    }
+
+
     return Promise.reject(error);
   }finally{
     store.uiStore.isIdle();

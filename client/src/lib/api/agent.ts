@@ -24,12 +24,7 @@ agent.interceptors.response.use(
     await sleep(1000);
     store.uiStore.isIdle();
     return response;
-  },
-  async error => {
-    await sleep(1000);
-    store.uiStore.isIdle();
-    return response;
-  },
+  }, 
   async error => {
     await sleep(1000);
     store.uiStore.isIdle();
@@ -65,8 +60,7 @@ agent.interceptors.response.use(
 
       default:
         break;
-    }
-
+    }  
 
     return Promise.reject(error);
   }

@@ -2,12 +2,17 @@ import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities"; 
 import { useParams } from "react-router";
-import { useForm, type FieldValues } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { activitySchema, type ActivitySchema } from "../../../lib/schemas/activitySchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+// import TextInput from "../../../app/shared/components/TextInput";
+import SelectInput from "../../../app/shared/components/SelectInput";
+import { categoryOptions } from "./categoryOptions";
+import TextInput from "../../../app/shared/components/TextInput";
+
 
 function ActivityForm() {
-  const { register, reset, handleSubmit, formState: { errors } } = useForm<ActivitySchema>({
+  const { register, control, reset, handleSubmit  } = useForm<ActivitySchema>({
     mode: 'onTouched',
     resolver: zodResolver(activitySchema)
   });
@@ -41,29 +46,40 @@ function ActivityForm() {
         flexDirection="column"
         gap={3}
       >
-        <TextField 
+        {/* <TextField 
           {...register("title")} 
           label="Title"
-          defaultValue={activity?.title}
-          error={!!errors.title}
-          helperText={errors.title?.message}
+          defaultValue={activity?.title} 
+        /> */}
+        <TextInput 
+          label="Title"
+          control={control}
+          name="title"
         />
+
         <TextField
           {...register("description")}
           label="Description"
           defaultValue={activity?.description}
           multiline
           rows={3}
-          error={!!errors.description}
-          helperText={errors.description?.message}
+          
         />
-        <TextField
+        {/* <TextField
           {...register("category")}
           label="Category"
           defaultValue={activity?.category}
           error={!!errors.category}
           helperText={errors.category?.message}
+        /> */}
+
+        <SelectInput
+          label="Category"
+          control={control}
+          name="category"
+          items={categoryOptions}
         />
+
         <TextField
           {...register("date")}
           name="date"
@@ -73,21 +89,17 @@ function ActivityForm() {
             activity?.date
               ? new Date(activity.date).toISOString().split("T")[0]
               : new Date().toISOString().split("T")[0]
-          }
-          error={!!errors.date}
-          helperText={errors.date?.message}
+          } 
         />
         <TextField {...register("city")} 
                     label="City" 
                     defaultValue={activity?.city}
-                    error={!!errors.city}
-                    helperText={errors.city?.message}
+                    
                     />
         <TextField {...register("venue")} 
                     label="Venue" 
                     defaultValue={activity?.venue}
-                    error={!!errors.venue}
-                    helperText={errors.venue?.message}
+                    
                     />
 
         <Box display="flex" justifyContent="end" gap={3}>

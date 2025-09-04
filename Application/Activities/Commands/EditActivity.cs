@@ -1,4 +1,7 @@
 using System;
+using Application.Activities.DTOs;
+using Application.Core;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Persistence;
@@ -7,24 +10,29 @@ namespace Application.Activities.Commands;
 
 public class EditActivity : IRequest<string>
 {
-    public class Command : IRequest<string>
+    public class Command : IRequest<Result<Unit>>
     { 
-        public required Activity Activity { get; set; }
+        public required EditActivityDto ActivityDto { get; set; }
     }
 
-    public class Handler (AppDbContext context): IRequestHandler<Command, string>
+    public class Handler (AppDbContext context, IMapper mapper): IRequestHandler<Command, Result<Unit>>
     {  
-        public async Task<string> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var activity = await context.Activities.FindAsync(new object[] { request.Activity.Id }, cancellationToken);
-            if (activity == null) throw new Exception($"Activity with ID {request.Activity.Id} not found.");
+            var activity = await context.Activities.FindAsync(new object[] { request.ActivityDto.Id }, cancellationToken);
+            if (activity == null)
+            {
+                return Result<Unit>.Failure("Activity not found", 404);
+            }
 
-            activity.Title = request.Activity.Title;
-            activity.Description = request.Activity.Description;
-            activity.Date = request.Activity.Date;
+            mapper.Map(request.ActivityDto, activity);
 
-            await context.SaveChangesAsync(cancellationToken);
-            return activity.Id;
+
+            var result = await context.SaveChangesAsync(cancellationToken) > 0;
+
+            if (!result) return Result<Unit>.Failure("Failed to update Activity ", 404);
+
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

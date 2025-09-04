@@ -55,7 +55,7 @@ agent.interceptors.response.use(
         break;
 
       case 500:
-        toast.error('Server error - please try again later.');
+         router.navigate('/server-error', {state: {error: data} });
         break;
 
       default:

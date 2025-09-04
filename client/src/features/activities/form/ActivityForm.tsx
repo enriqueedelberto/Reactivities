@@ -1,36 +1,27 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import type { FormEvent } from "react";
+import { useEffect } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities"; 
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
+import { useForm, type FieldValues } from "react-hook-form";
+import { activitySchema, type ActivitySchema } from "../../../lib/schemas/activitySchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 function ActivityForm() {
+  const { register, reset, handleSubmit, formState: { errors } } = useForm<ActivitySchema>({
+    mode: 'onTouched',
+    resolver: zodResolver(activitySchema)
+  });
   const {id} = useParams();
-  const { updateActivity, createActivity, activity, isLoadingActivity } = useActivities(id);
-  const navigate = useNavigate();
+  const { updateActivity, createActivity, activity, isLoadingActivity } = useActivities(id); 
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-
-    const data: { [key: string]: FormDataEntryValue } = {};
-    formData.forEach((element, key) => {
-      data[key] = element;
-    });
-
+  useEffect(() => {
     if (activity) {
-      data.id = activity.id;
-      await updateActivity.mutateAsync(data as unknown as Activity); 
-      navigate(`/activities/${activity.id}`);
-    } else {
-      createActivity.mutate(data as unknown as Activity,{
-        onSuccess: (id)=>{
-          navigate(`/activities/${id}`);
-        }
-      }); 
+      reset(activity);
     }
+  }, [activity, reset]);
 
-    console.log(data);
+  const onSubmit =  (data: ActivitySchema ) => { 
+     console.log(data);
   };
 
   if(isLoadingActivity) {
@@ -45,25 +36,36 @@ function ActivityForm() {
 
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         display="flex"
         flexDirection="column"
         gap={3}
       >
-        <TextField name="title" label="Title" defaultValue={activity?.title} />
+        <TextField 
+          {...register("title")} 
+          label="Title"
+          defaultValue={activity?.title}
+          error={!!errors.title}
+          helperText={errors.title?.message}
+        />
         <TextField
-          name="description"
+          {...register("description")}
           label="Description"
           defaultValue={activity?.description}
           multiline
           rows={3}
+          error={!!errors.description}
+          helperText={errors.description?.message}
         />
         <TextField
-          name="category"
+          {...register("category")}
           label="Category"
           defaultValue={activity?.category}
+          error={!!errors.category}
+          helperText={errors.category?.message}
         />
         <TextField
+          {...register("date")}
           name="date"
           label="Date"
           type="date"
@@ -72,9 +74,21 @@ function ActivityForm() {
               ? new Date(activity.date).toISOString().split("T")[0]
               : new Date().toISOString().split("T")[0]
           }
+          error={!!errors.date}
+          helperText={errors.date?.message}
         />
-        <TextField name="city" label="City" defaultValue={activity?.city} />
-        <TextField name="venue" label="Venue" defaultValue={activity?.venue} />
+        <TextField {...register("city")} 
+                    label="City" 
+                    defaultValue={activity?.city}
+                    error={!!errors.city}
+                    helperText={errors.city?.message}
+                    />
+        <TextField {...register("venue")} 
+                    label="Venue" 
+                    defaultValue={activity?.venue}
+                    error={!!errors.venue}
+                    helperText={errors.venue?.message}
+                    />
 
         <Box display="flex" justifyContent="end" gap={3}>
           <Button color="inherit">

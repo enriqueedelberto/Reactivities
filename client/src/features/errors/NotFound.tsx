@@ -19,7 +19,7 @@ export default function NotFound() {
         Oops - we've looked everywhere but we couldn't find what you are looking
         for
       </Typography>
-      <Button fullWidth component={Link} to="activities">
+      <Button fullWidth component={Link} to="/activities">
         return to the activities page.
       </Button>
     </Paper>

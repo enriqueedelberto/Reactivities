@@ -2,6 +2,7 @@
 import axios from "axios";
 import { store } from "../stores/store";
 import { toast } from "react-toastify";
+import { router } from "../../app/router/Routes";
 
 const sleep = (delay: number) => {
   return new Promise(resolve => {
@@ -40,7 +41,7 @@ agent.interceptors.response.use(
         break;
 
       case 404:
-        toast.error('Not found - the requested resource could not be found.');
+        router.navigate('/not-found');
         break;
 
       case 500:

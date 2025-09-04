@@ -24,16 +24,26 @@ agent.interceptors.response.use(
     await sleep(1000);
     store.uiStore.isIdle();
     return response;
-  },
+  }, 
   async error => {
     await sleep(1000);
     store.uiStore.isIdle();
 
-    const { status } = error.response;
+    const { status, data } = error.response;
 
     switch (status) {
       case 400:
-        toast.error('Bad request - please check your input.');
+        if(data.errors){
+          const modelStateErrors = [];
+          for (const key in data.errors) {
+            modelStateErrors.push(data.errors[key]);
+          }
+          throw modelStateErrors.flat();
+        }
+        else{
+          toast.error(data);
+        }
+        
         break;
 
       case 401:
@@ -45,13 +55,12 @@ agent.interceptors.response.use(
         break;
 
       case 500:
-        toast.error('Server error - please try again later.');
+         router.navigate('/server-error', {state: {error: data} });
         break;
 
       default:
         break;
-    }
-
+    }  
 
     return Promise.reject(error);
   }

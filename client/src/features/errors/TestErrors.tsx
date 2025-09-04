@@ -1,5 +1,5 @@
 
-import { Button, ButtonGroup, Typography } from '@mui/material';
+import { Alert, Button, ButtonGroup, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import agent from "../../lib/api/agent.ts";
 import {useState} from "react";
@@ -46,6 +46,12 @@ export default function TestErrors() {
                     Unauthorised
                 </Button>
             </ButtonGroup>
+
+            { validationErrors.map((error, index) => (
+                <Alert key={index} severity='error' color="error">
+                    {error}
+                </Alert>
+            ))}
         </>
     );
 }

@@ -9,8 +9,7 @@ export const activitySchema = z.object({
   title: requiredString('Title'),
   description: requiredString('Description').min(10).max(500),
   category: requiredString('Category').min(2).max(100),
-  date: requiredString('Date')
-   .refine((date) => !isNaN(Date.parse(date)), {
+  date:   z.coerce.date( {
     message: "Invalid date",
   }),
   city: requiredString('City'),

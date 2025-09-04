@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import SelectInput from "../../../app/shared/components/SelectInput";
 import { categoryOptions } from "./categoryOptions";
 import TextInput from "../../../app/shared/components/TextInput";
+import DateTimeInput from "../../../app/shared/components/DateTimeInput";
 
 
 function ActivityForm() {
@@ -91,6 +92,13 @@ function ActivityForm() {
               : new Date().toISOString().split("T")[0]
           } 
         />
+
+        {/* <DateTimeInput
+          label="Date"
+          control={control}
+          name="date"
+        /> */}
+
         <TextField {...register("city")} 
                     label="City" 
                     defaultValue={activity?.city}

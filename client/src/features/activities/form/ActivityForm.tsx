@@ -1,7 +1,7 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities"; 
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { activitySchema, type ActivitySchema } from "../../../lib/schemas/activitySchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,6 +10,7 @@ import SelectInput from "../../../app/shared/components/SelectInput";
 import { categoryOptions } from "./categoryOptions";
 import TextInput from "../../../app/shared/components/TextInput";
 import DateTimeInput from "../../../app/shared/components/DateTimeInput";
+import { Link } from "react-router";
 
 
 function ActivityForm() {
@@ -17,6 +18,7 @@ function ActivityForm() {
     mode: 'onTouched',
     resolver: zodResolver(activitySchema)
   });
+  const navigate = useNavigate();
   const {id} = useParams();
   const { updateActivity, createActivity, activity, isLoadingActivity } = useActivities(id); 
 
@@ -28,6 +30,21 @@ function ActivityForm() {
 
   const onSubmit =  (data: ActivitySchema ) => { 
      console.log(data);
+     
+
+     try {
+       if(activity) {
+         updateActivity.mutate( {...activity, ...data}, {
+          onSuccess: () =>  navigate(`/activities/${activity.id}`)
+         });
+       } else {
+         createActivity.mutate({...activity, ...data}, {
+          onSuccess: (id) => navigate(`/activities/${id}`)
+         });
+       }
+     } catch (error) {
+      console.log(error);
+     }
   };
 
   if(isLoadingActivity) {
@@ -74,7 +91,8 @@ function ActivityForm() {
           helperText={errors.category?.message}
         /> */}
 
-        <SelectInput
+        <Box display='flex' gap={3}>
+          <SelectInput
           label="Category"
           control={control}
           name="category"
@@ -92,6 +110,8 @@ function ActivityForm() {
               : new Date().toISOString().split("T")[0]
           } 
         />
+
+        </Box> 
 
         {/* <DateTimeInput
           label="Date"
@@ -111,7 +131,7 @@ function ActivityForm() {
                     />
 
         <Box display="flex" justifyContent="end" gap={3}>
-          <Button color="inherit">
+          <Button color="inherit" component={Link} to='/activities' variant="outlined">
             Cancel
           </Button>
           <Button

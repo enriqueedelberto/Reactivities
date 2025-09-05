@@ -11,7 +11,7 @@ type Activity = {
     longitude: number;
 }
 
-export interface Location {
+export interface LocationIQ {
   place_id: string
   licence: string
   osm_type: string

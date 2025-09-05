@@ -1,7 +1,7 @@
 type Activity = {
     id: string;
     title: string;
-    date: string;  
+    date: Date;  
     description: string;
     category: string;
     isCancelled: boolean;
@@ -9,4 +9,32 @@ type Activity = {
     venue: string;
     latitude: number;
     longitude: number;
+}
+
+export interface Location {
+  place_id: string
+  licence: string
+  osm_type: string
+  osm_id: string
+  boundingbox: string[]
+  lat: string
+  lon: string
+  display_name: string
+  class: string
+  type: string
+  importance: number
+  icon: string
+}
+
+export type Address = {
+    name: string;
+    house_number: string;
+    road:string;
+    suburb?: string;
+    city: string;
+    county: string;
+    state: string;
+    postcode: string;
+    country: string;
+    country_code: string;
 }

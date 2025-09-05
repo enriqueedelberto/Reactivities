@@ -1,36 +1,33 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import type { FormEvent } from "react";
+import { useEffect } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities"; 
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
+import { useForm } from "react-hook-form";
+import { activitySchema, type ActivitySchema } from "../../../lib/schemas/activitySchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+// import TextInput from "../../../app/shared/components/TextInput";
+import SelectInput from "../../../app/shared/components/SelectInput";
+import { categoryOptions } from "./categoryOptions";
+import TextInput from "../../../app/shared/components/TextInput";
+import DateTimeInput from "../../../app/shared/components/DateTimeInput";
+
 
 function ActivityForm() {
+  const { register, control, reset, handleSubmit  } = useForm<ActivitySchema>({
+    mode: 'onTouched',
+    resolver: zodResolver(activitySchema)
+  });
   const {id} = useParams();
-  const { updateActivity, createActivity, activity, isLoadingActivity } = useActivities(id);
-  const navigate = useNavigate();
+  const { updateActivity, createActivity, activity, isLoadingActivity } = useActivities(id); 
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-
-    const data: { [key: string]: FormDataEntryValue } = {};
-    formData.forEach((element, key) => {
-      data[key] = element;
-    });
-
+  useEffect(() => {
     if (activity) {
-      data.id = activity.id;
-      await updateActivity.mutateAsync(data as unknown as Activity); 
-      navigate(`/activities/${activity.id}`);
-    } else {
-      createActivity.mutate(data as unknown as Activity,{
-        onSuccess: (id)=>{
-          navigate(`/activities/${id}`);
-        }
-      }); 
+      reset(activity);
     }
+  }, [activity, reset]);
 
-    console.log(data);
+  const onSubmit =  (data: ActivitySchema ) => { 
+     console.log(data);
   };
 
   if(isLoadingActivity) {
@@ -45,25 +42,47 @@ function ActivityForm() {
 
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         display="flex"
         flexDirection="column"
         gap={3}
       >
-        <TextField name="title" label="Title" defaultValue={activity?.title} />
+        {/* <TextField 
+          {...register("title")} 
+          label="Title"
+          defaultValue={activity?.title} 
+        /> */}
+        <TextInput 
+          label="Title"
+          control={control}
+          name="title"
+        />
+
         <TextField
-          name="description"
+          {...register("description")}
           label="Description"
           defaultValue={activity?.description}
           multiline
           rows={3}
+          
         />
-        <TextField
-          name="category"
+        {/* <TextField
+          {...register("category")}
           label="Category"
           defaultValue={activity?.category}
+          error={!!errors.category}
+          helperText={errors.category?.message}
+        /> */}
+
+        <SelectInput
+          label="Category"
+          control={control}
+          name="category"
+          items={categoryOptions}
         />
+
         <TextField
+          {...register("date")}
           name="date"
           label="Date"
           type="date"
@@ -71,10 +90,25 @@ function ActivityForm() {
             activity?.date
               ? new Date(activity.date).toISOString().split("T")[0]
               : new Date().toISOString().split("T")[0]
-          }
+          } 
         />
-        <TextField name="city" label="City" defaultValue={activity?.city} />
-        <TextField name="venue" label="Venue" defaultValue={activity?.venue} />
+
+        {/* <DateTimeInput
+          label="Date"
+          control={control}
+          name="date"
+        /> */}
+
+        <TextField {...register("city")} 
+                    label="City" 
+                    defaultValue={activity?.city}
+                    
+                    />
+        <TextField {...register("venue")} 
+                    label="Venue" 
+                    defaultValue={activity?.venue}
+                    
+                    />
 
         <Box display="flex" justifyContent="end" gap={3}>
           <Button color="inherit">

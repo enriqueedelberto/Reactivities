@@ -1,16 +1,18 @@
-import React from "react";
 import { useAccount } from "../../lib/hooks/useAccount";
 import { useForm } from "react-hook-form";
-import { loginSchema, LoginSchema } from "../../lib/schemas/loginSchema";
+import { loginSchema, type LoginSchema } from "../../lib/schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import { LockOpen } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 import TextInput from "../../app/shared/components/TextInput";
+import { useLocation, useNavigate } from "react-router";
 
 export default function LoginForm() {
   const { loginUser } = useAccount();
+  const navigate = useNavigate();
+  const location = useLocation();
   const {
     control,
     handleSubmit,
@@ -21,7 +23,11 @@ export default function LoginForm() {
   });
 
   const onSubmit = (data: LoginSchema) => {
-    loginUser.mutate(data);
+    loginUser.mutate(data, {
+      onSuccess: () => {
+        navigate(location.state?.from || '/activities');
+      }
+    });
   };
 
   return (

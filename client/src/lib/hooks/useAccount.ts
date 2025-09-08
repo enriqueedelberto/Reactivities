@@ -1,10 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { LoginSchema } from "../schemas/loginSchema";
 import agent from "../api/agent";
-import type { User } from "../types";
+import type { User } from "../types"; 
+import { useNavigate } from "react-router";
 
 export const useAccount = () => {
     const queryClient  = useQueryClient();
+    const navigate = useNavigate();
+
     const loginUser = useMutation({
         mutationFn: async (creds: LoginSchema) => {
             await agent.post('/login?useCookies=true', creds);
@@ -13,19 +16,39 @@ export const useAccount = () => {
             await queryClient.invalidateQueries({
                 queryKey: ['user']
             });
+            await navigate('/activities'); 
         }
     });
+
+    const logoutUser =  useMutation({
+        mutationFn: async() =>{
+            await agent.post('/account/logout');
+        },
+        onSuccess: async () =>{
+            await queryClient.removeQueries({
+                queryKey: ['user']
+            });
+
+             await queryClient.removeQueries({
+                queryKey: ['activities']
+            });
+
+            navigate('/');
+        }
+    });    
 
     const {data: currentUser} = useQuery({
         queryKey: ['user'],
         queryFn: async()=>{
             const response = await agent.get<User>('/account/user-info');
             return response.data;
-        }
+        },
+        enabled: !queryClient.getQueryData(['user'])
     });
 
     return {
         loginUser,
-        currentUser
+        currentUser,
+        logoutUser
     }
 }

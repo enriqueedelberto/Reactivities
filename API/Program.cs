@@ -8,12 +8,18 @@ using Persistence;
 using API.Middleware;
 using Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));    
+});
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -58,9 +64,9 @@ app.UseMiddleware<ExceptionMiddleware>();
 //Use CORS
 app.UseCors(policy =>
 {
-    policy.AllowAnyMethod()
-          .AllowAnyHeader()
-          .WithOrigins("http://localhost:5173", "https://localhost:5173");
+    policy.AllowAnyHeader().AllowAnyMethod()
+    .AllowCredentials()
+    .WithOrigins("http://localhost:5173", "https://localhost:5173");
 });
 
 // app.UseHttpsRedirection();

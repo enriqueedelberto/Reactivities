@@ -3,6 +3,7 @@ using Application.Activities.DTOs;
 using Application.Activities.Queries;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence;
 
@@ -17,11 +18,12 @@ public class ActivitiesController : BaseApiController
         return await Mediator.Send(new GetActivityList.Query());
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<Activity>> GetActivityDetail(string id)
     {
         //Use existing mediator
-        return HandleResult(await Mediator.Send(new GetActivityDetail.Query { Id = id })); 
+        return HandleResult(await Mediator.Send(new GetActivityDetail.Query { Id = id }));
     }
 
     [HttpPost]
@@ -39,6 +41,6 @@ public class ActivitiesController : BaseApiController
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteActivity(string id)
     {
-        return HandleResult(await Mediator.Send(new DeleteActivity.Command { Id = id })); 
+        return HandleResult(await Mediator.Send(new DeleteActivity.Command { Id = id }));
     }
 }

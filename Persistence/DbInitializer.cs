@@ -17,19 +17,19 @@ public class DbInitializer
                 new()
                 {
                     DisplayName = "Bob",
-                    UserName = "bob",
+                    UserName = "bob@example.com",
                     Email = "bob@example.com"
                 },
                 new()
                 {
                     DisplayName = "Alice",
-                    UserName = "alice",
+                    UserName = "alice@example.com",
                     Email = "alice@example.com"
                 },
                 new()
                 {
                     DisplayName = "Tom",
-                    UserName = "tom",
+                    UserName = "tom@example.com",
                     Email = "tom@example.com"
                 },
             };

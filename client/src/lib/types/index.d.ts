@@ -11,6 +11,13 @@ type Activity = {
     longitude: number;
 }
 
+type User = {
+  id: string;
+  email: string;
+  displayName: string;
+  imageUrl?: string;
+}
+
 export interface Location {
   place_id: string
   licence: string

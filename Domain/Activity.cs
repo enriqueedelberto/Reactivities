@@ -14,4 +14,6 @@ public class Activity
     public double Latitude { get; set; }
     public double Longitude { get; set; }
 
+    public ICollection<ActivityAttendee> Attendees { get; set; } = [];
+
 }

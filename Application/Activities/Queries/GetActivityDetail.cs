@@ -17,7 +17,7 @@ public class GetActivityDetail
     {
         public async Task<Result<Activity>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var activity = await context.Activities.FindAsync(request.Id);
+            var activity = await context.Activities.FindAsync(request.Id, cancellationToken);
             
             if (activity == null)
             {

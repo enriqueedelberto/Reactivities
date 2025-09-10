@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Domain;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Persistence;
 
@@ -20,5 +21,14 @@ public class UserAccessor(IHttpContextAccessor httpContextAccessor, AppDbContext
     {
         return httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier)
                ?? throw new Exception("User not found");
+    }
+
+    public async Task<User> GetUserWithPhotosAsync()
+    {
+        var userId = GetUserId();
+        return await dbContext.Users
+            .Include(x => x.Photos)
+            .FirstOrDefaultAsync()
+             ?? throw new UnauthorizedAccessException("No user is logged in");
     }
 }

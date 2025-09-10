@@ -9,7 +9,7 @@ type Props = {
 };
 
 export default function ActivityDetailsHeader({activity} : Props) { 
-      const { updateAttendance } = useActivities(); 
+      const { updateAttendance } = useActivities(activity.id); 
 
     return (
         <Card sx={{ position: 'relative', mb: 2, backgroundColor: 'transparent', overflow: 'hidden' }}>

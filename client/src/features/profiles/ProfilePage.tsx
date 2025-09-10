@@ -1,5 +1,4 @@
 import { Grid, Typography } from '@mui/material'
-import React from 'react'
 import ProfileHeader from './ProfileHeader'
 import ProfileContent from './ProfileContent'
 import { useParams } from 'react-router'

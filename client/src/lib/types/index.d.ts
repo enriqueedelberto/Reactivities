@@ -1,20 +1,20 @@
 type Activity = {
-    id: string;
-    title: string;
-    date: Date;  
-    description: string;
-    category: string;
-    isCancelled: boolean;
-    city: string;
-    venue: string;
-    latitude: number;
-    longitude: number;
-    attendees: Profile[]
-    isGoing: boolean
-    isHost: boolean
-    hostId: string
-    hostDisplayName: string
-    hostImageUrl: string
+  id: string;
+  title: string;
+  date: Date;
+  description: string;
+  category: string;
+  isCancelled: boolean;
+  city: string;
+  venue: string;
+  latitude: number;
+  longitude: number;
+  attendees: Profile[]
+  isGoing: boolean
+  isHost: boolean
+  hostId: string
+  hostDisplayName: string
+  hostImageUrl: string
 }
 
 type Profile = {
@@ -22,6 +22,11 @@ type Profile = {
   displayName: string
   bio?: string
   imageUrl?: string
+}
+
+type Photo = {
+  id: string
+  url: string
 }
 
 type User = {
@@ -47,14 +52,14 @@ export interface Location {
 }
 
 export type Address = {
-    name: string;
-    house_number: string;
-    road:string;
-    suburb?: string;
-    city: string;
-    county: string;
-    state: string;
-    postcode: string;
-    country: string;
-    country_code: string;
+  name: string;
+  house_number: string;
+  road: string;
+  suburb?: string;
+  city: string;
+  county: string;
+  state: string;
+  postcode: string;
+  country: string;
+  country_code: string;
 }

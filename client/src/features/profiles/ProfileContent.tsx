@@ -1,6 +1,7 @@
 import { Box, Paper, Tab, Tabs } from '@mui/material';
 import {   useState } from 'react'
 import * as React from 'react';
+import ProfilePhotos from './ProfilePhotos';
 
 export default function ProfileContent() {
   const [value, setValue] = useState(0);
@@ -10,7 +11,7 @@ export default function ProfileContent() {
 
   const tabContent = [
     {label: 'about', content: <div>About</div>},
-    {label: 'photos', content: <div>photos</div>},
+    {label: 'photos', content: <ProfilePhotos />},
     {label: 'events', content: <div>events</div>},
     {label: 'followers', content: <div>followers</div>},
     {label: 'following', content: <div>following</div>},

@@ -6,15 +6,15 @@ import { useAccount } from "./useAccount";
 
 export const useActivities = (id?: string) => {
   const queryClient = useQueryClient();
-  const {currentUser} = useAccount();
+  const { currentUser } = useAccount();
   const location = useLocation();
 
-  const { data: activities,  isLoading } = useQuery({
+  const { data: activities, isLoading } = useQuery({
     queryKey: ["activities"],
     queryFn: async () => {
       const response = await agent.get<Activity[]>("/activities");
       return response.data;
-    }, 
+    },
     enabled: !id && location.pathname === '/activities' && !!currentUser,
     select: data => {
       return data.map(activity => {
@@ -27,7 +27,7 @@ export const useActivities = (id?: string) => {
     }
   });
 
-  const {data: activity, isLoading: isLoadingActivity} = useQuery({
+  const { data: activity, isLoading: isLoadingActivity } = useQuery({
     queryKey: ["activities", id],
     queryFn: async () => {
       const response = await agent.get<Activity>(`/activities/${id}`);
@@ -37,8 +37,8 @@ export const useActivities = (id?: string) => {
     select: data => {
       return {
         ...data,
-          isHost: currentUser?.id === data.hostId,
-          isGoing: data.attendees.some(x => x.id === currentUser?.id)
+        isHost: currentUser?.id === data.hostId,
+        isGoing: data.attendees.some(x => x.id === currentUser?.id)
       }
     }
   })
@@ -77,13 +77,25 @@ export const useActivities = (id?: string) => {
     }
   });
 
+  const updateAttendance = useMutation({
+    mutationFn: async (id: string) => {
+      await agent.post(`/activities/${id}/attend`)
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['activities', id]
+      })
+    }
+  });
+
   return {
     activities,
     isLoading,
     updateActivity,
     createActivity,
-    deleteActivity, 
+    deleteActivity,
     activity,
-    isLoadingActivity
+    isLoadingActivity,
+    updateAttendance
   };
 }

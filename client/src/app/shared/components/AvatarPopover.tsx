@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
 import { Avatar } from '@mui/material';
 import { Link } from 'react-router';
 import ProfileCard from '../../../features/profiles/ProfileCard';
+import type { Profile } from '../../../lib/types';
 
 type Props = {
     profile: Profile

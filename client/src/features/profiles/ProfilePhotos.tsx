@@ -19,8 +19,12 @@ export default function ProfilePhotos() {
       {photos.map((item) => (
         <ImageListItem key={item.id}>
           <img
-            srcSet={`${item.url}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-            src={`${item.url}?w=164&h=164&fit=crop&auto=format`}
+            srcSet={`${item.url.replace(
+                '/upload', 
+                '/upload/w_164,h_164,c_fill,f_auto,dpr_2,g_face')}`}
+            src={`${item.url.replace(
+                '/upload', 
+                '/upload/w_164,h_164,c_fill,f_auto,g_face')}`}
             alt={ 'USer profile image'}
             loading="lazy"
           />

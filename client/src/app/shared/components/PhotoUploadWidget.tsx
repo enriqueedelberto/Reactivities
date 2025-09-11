@@ -1,24 +1,34 @@
 import { CloudUpload } from "@mui/icons-material";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Cropper, { type ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
-export default function PhotoUploadWidget() {
+type Props = {
+    uploadPhoto: (file: Blob) => void
+    loading: boolean
+}
+
+export default function PhotoUploadWidget({uploadPhoto, loading}) {
   const [files, setFiles] = useState<object & { preview: string }[]>([]);
   const cropperRef = useRef<ReactCropperElement>(null);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    // Do something with the files
-    setFiles(
-      acceptedFiles.map((file) =>
+  const onDrop = useCallback((acceptedFiles: File[]) => { 
+    setFiles( acceptedFiles.map((file) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file as Blob),
         })
       )
     );
   }, []);
+
+  const onCrop = useCallback(() => {
+       const cropper = cropperRef.current?.cropper;
+       cropper?.getCroppedCanvas().toBlob(blob =>{
+        uploadPhoto(blob as Blob);
+       });
+  },[uploadPhoto]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -65,6 +75,7 @@ export default function PhotoUploadWidget() {
             guides={false}
             viewMode={1}
             background={false}
+            ref={cropperRef}
           />
         )}
       </Grid>
@@ -73,10 +84,18 @@ export default function PhotoUploadWidget() {
           <>
             <Typography variant="overline" color="secondary">
               {" "}
-              Step 1 - preview & upload photo
+              Step 3 - preview & upload photo
             </Typography>
             <div className="img-preview" 
             style={{width: 300, height: 300, overflow: 'hidden'}}/>
+
+            <Button 
+            sx={{mt:2}}
+            onClick={onCrop}
+            variant="contained"
+            color='secondary'
+            disabled={loading}
+            > Upload</Button>
           </>
         )}
       </Grid>

@@ -12,8 +12,16 @@ import { useState } from "react";
 
 export default function ProfilePhotos() {
   const { id } = useParams();
-  const { photos, loadingPhotos, isCurrentUser } = useProfile(id);
+  const { photos, loadingPhotos, isCurrentUser, uploadPhoto } = useProfile(id);
   const [editMode, setEditMode] = useState(false);
+
+  const handlePhotoUpload = (file: Blob) =>{
+    uploadPhoto.mutate(file, {
+      onSuccess: () =>{
+        setEditMode(false);
+      }
+    })
+  };
 
   if (loadingPhotos) {
     return <Typography> Loading photos...</Typography>;
@@ -33,7 +41,9 @@ export default function ProfilePhotos() {
         </Box>
       )}
       {editMode ? (
-         <PhotoUploadWidget /> 
+         <PhotoUploadWidget 
+             uploadPhoto={handlePhotoUpload} 
+             loading={uploadPhoto.isPending}/> 
       ) : (
         <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
           {photos.map((item) => (

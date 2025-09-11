@@ -30,7 +30,7 @@ export default function ProfileContent() {
         orientation='vertical' 
         variant='scrollable'
         value={value}
-        onChance={handleChange}
+        onChange={handleChange}
          aria-label="Vertical tabs example"
         sx={{borderRight: 1, height: 450, minWidth: 200}}
       >

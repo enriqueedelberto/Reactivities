@@ -27,7 +27,7 @@ export default function ProfilePhotos() {
     return <Typography> Loading photos...</Typography>;
   }
 
-  if (!photos || photos.length === 0) {
+  if (!photos ) {
     return <Typography> Photos not found...</Typography>;
   }
 

@@ -11,13 +11,13 @@ public class Comment
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public required string Body { get; set; }
-    public DateTime CreateAt { get; set; } = DateTime.UtcNow; 
+    public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 
     public required string UserId { get; set; }
-    public required User User { get; set; }
+    public User User { get; set; } = null!;
 
     public required string ActivityId { get; set; }
-    public required Activity Activity { get; set; }
+    public Activity Activity { get; set; } = null!;
 
 
 

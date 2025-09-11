@@ -38,7 +38,7 @@ function ActivityCard({ activity }: Props) {
           }}
           subheader={
             <>
-              Hosted by {' '} <Link to={`/profiles/${activity.hostId}`}>
+              Hosted by {' '} <Link to={`/profile/${activity.hostId}`}>
                {activity.hostDisplayName}
               </Link>
             </>

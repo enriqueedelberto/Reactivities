@@ -36,6 +36,15 @@ type User = {
   imageUrl?: string;
 }
 
+type ChatComment = {
+  id: string
+  createAt: Date
+  body: string
+  userId: string
+  displayName: string
+  imageUrl?: string
+}
+
 export interface Location {
   place_id: string
   licence: string

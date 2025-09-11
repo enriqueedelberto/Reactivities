@@ -2,57 +2,64 @@ import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@micros
 import { useLocalObservable } from "mobx-react-lite"
 import { useEffect, useRef } from 'react';
 import type { ChatComment } from '../types';
+import { runInAction } from 'mobx';
 
-export const useComments = (activityId?: string) =>{
+export const useComments = (activityId?: string) => {
     const created = useRef(false);
-  const commentStore = useLocalObservable(()=>({
-     comments: [] as ChatComment[],
-     hubConnection: null as HubConnection | null,
+    const commentStore = useLocalObservable(() => ({
+        comments: [] as ChatComment[],
+        hubConnection: null as HubConnection | null,
 
-     createHubConnection(activityId: string){
-        if(!activityId) return;
+        createHubConnection(activityId: string) {
+            if (!activityId) return;
 
-        this.hubConnection = new HubConnectionBuilder()
-             .withUrl(`${import.meta.env.VITE_COMMENTS_URL}?activityId=${activityId}`, {
-                withCredentials: true
-             })
-             .withAutomaticReconnect()
-             .build();
+            this.hubConnection = new HubConnectionBuilder()
+                .withUrl(`${import.meta.env.VITE_COMMENTS_URL}?activityId=${activityId}`, {
+                    withCredentials: true
+                })
+                .withAutomaticReconnect()
+                .build();
 
-             this.hubConnection.start().catch(error => 
-                 console.log('Error with connection', error));
+            this.hubConnection.start().catch(error =>
+                console.log('Error with connection', error));
 
-                 this.hubConnection.on('LoadComments', comments =>{
+            this.hubConnection.on('LoadComments', comments => {
+                runInAction(() => {
                     this.comments = comments;
-                 });
+                });
 
-                 this.hubConnection.on('ReceiveComment', comment =>{
+            });
+
+            this.hubConnection.on('ReceiveComment', comment => {
+                runInAction(() => {
                     this.comments.unshift(comment);
-                 });
+                });
 
-     },
+            });
 
-     stopHubConnection(){
-        if(this.hubConnection?.state == HubConnectionState.Connected){
-            this.hubConnection.stop().catch(error => 
-                 console.log('Error with stopping connection', error));
+        },
+
+        stopHubConnection() {
+            if (this.hubConnection?.state == HubConnectionState.Connected) {
+                this.hubConnection.stop().catch(error =>
+                    console.log('Error with stopping connection', error));
+            }
         }
-     }
-  }));
+    }));
 
-  useEffect(() => {
-    if(activityId  && !created.current){
-        commentStore.createHubConnection(activityId);
-        created.current = true;
+    useEffect(() => {
+        if (activityId && !created.current) {
+            commentStore.createHubConnection(activityId);
+            created.current = true;
+        }
+
+        return () => {
+            commentStore.stopHubConnection();
+            commentStore.comments = [];
+        }
+    }, [activityId, commentStore]);
+
+    return {
+        commentStore
     }
-
-    return () => {
-        commentStore.stopHubConnection();
-        commentStore.comments = [];
-    }
-  }, [activityId, commentStore]);
-
-  return {
-    commentStore
-  }
 }

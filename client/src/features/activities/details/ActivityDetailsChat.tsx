@@ -38,7 +38,7 @@ export default function ActivityDetailsChat() {
   const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if(event.key === 'Enter' && !event.shiftKey){
           event.preventDefault();
-          handleSubmit(addComment);
+          handleSubmit(addComment)();
     }
   };
 

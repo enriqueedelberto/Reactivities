@@ -52,7 +52,7 @@ public class ProfilesController : BaseApiController
     }
 
 
-    [HttpGet("{userId}/follow-llist")]
+    [HttpGet("{userId}/follow-list")]
     public async Task<ActionResult> GetFollowings(string userId, string predicate)
     {
         return HandleResult(await Mediator.Send(new GetFollowings.Query { UserId = userId, Predicate = predicate }));

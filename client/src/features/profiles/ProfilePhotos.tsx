@@ -9,10 +9,11 @@ import {
 } from "@mui/material";
 import PhotoUploadWidget from "../../app/shared/components/PhotoUploadWidget";
 import { useState } from "react";
+import StarButton from "../../app/shared/components/StarButton";
 
 export default function ProfilePhotos() {
   const { id } = useParams();
-  const { photos, loadingPhotos, isCurrentUser, uploadPhoto } = useProfile(id);
+  const { photos, loadingPhotos, isCurrentUser, uploadPhoto, profile, setMainPhoto } = useProfile(id);
   const [editMode, setEditMode] = useState(false);
 
   const handlePhotoUpload = (file: Blob) =>{
@@ -60,6 +61,14 @@ export default function ProfilePhotos() {
                 alt={"USer profile image"}
                 loading="lazy"
               />
+
+              {isCurrentUser && (
+                <Box sx={{position: 'absolute', top: 0, left: 0}}
+                   onClick={() => setMainPhoto.mutate(item)}
+                >
+                   <StarButton selected={item.url === profile?.imageUrl} />
+                </Box>
+              )}
             </ImageListItem>
           ))}
         </ImageList>

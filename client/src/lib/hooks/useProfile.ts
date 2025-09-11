@@ -1,4 +1,4 @@
-import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { Photo, Profile, User } from "../types"
 import agent from "../api/agent";
 import { useMemo } from "react";
@@ -12,6 +12,32 @@ export const useProfile = (id?: string) => {
             return response.data;
         },
         enabled: !!id
+    });
+
+    const setMainPhoto = useMutation({
+        mutationFn: async (photo: Photo) =>{
+            await agent.put(`/profiles/${photo.id}/set-main-photo`);
+
+        },
+        onSuccess: (_, photo) =>{
+            queryClient.setQueryData( ['user'], (userData: User)=>{
+                if(!userData) return userData;
+
+                return {
+                    ...userData,
+                    imageUrl: photo.url 
+                }; 
+            }); 
+
+            queryClient.setQueryData( ['profile'], (profile: User)=>{
+                if(!profile) return profile;
+
+                return {
+                    ...profile,
+                    imageUrl: photo.url 
+                }; 
+            }); 
+        }
     });
 
 
@@ -67,7 +93,8 @@ export const useProfile = (id?: string) => {
         photos,
         loadingPhotos,
         isCurrentUser,
-        uploadPhoto
+        uploadPhoto,
+        setMainPhoto
     }
 }
 

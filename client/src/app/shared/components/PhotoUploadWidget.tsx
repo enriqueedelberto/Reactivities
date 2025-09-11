@@ -1,21 +1,28 @@
 import { CloudUpload } from "@mui/icons-material";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Cropper, { type ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
 type Props = {
-    uploadPhoto: (file: Blob) => void
-    loading: boolean
-}
+  uploadPhoto: (file: Blob) => void;
+  loading: boolean;
+};
 
-export default function PhotoUploadWidget({uploadPhoto, loading}) {
+export default function PhotoUploadWidget({ uploadPhoto, loading }) {
   const [files, setFiles] = useState<object & { preview: string }[]>([]);
   const cropperRef = useRef<ReactCropperElement>(null);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => { 
-    setFiles( acceptedFiles.map((file) =>
+  useEffect(() =>{
+    return ()=>{
+      files.forEach(file => URL.revokeObjectURL(file.preview));
+    }
+  }, [files]);
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    setFiles(
+      acceptedFiles.map((file) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file as Blob),
         })
@@ -24,11 +31,11 @@ export default function PhotoUploadWidget({uploadPhoto, loading}) {
   }, []);
 
   const onCrop = useCallback(() => {
-       const cropper = cropperRef.current?.cropper;
-       cropper?.getCroppedCanvas().toBlob(blob =>{
-        uploadPhoto(blob as Blob);
-       });
-  },[uploadPhoto]);
+    const cropper = cropperRef.current?.cropper;
+    cropper?.getCroppedCanvas().toBlob((blob) => {
+      uploadPhoto(blob as Blob);
+    });
+  }, [uploadPhoto]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -86,16 +93,20 @@ export default function PhotoUploadWidget({uploadPhoto, loading}) {
               {" "}
               Step 3 - preview & upload photo
             </Typography>
-            <div className="img-preview" 
-            style={{width: 300, height: 300, overflow: 'hidden'}}/>
+            <div
+              className="img-preview"
+              style={{ width: 300, height: 300, overflow: "hidden" }}
+            />
 
-            <Button 
-            sx={{mt:2}}
-            onClick={onCrop}
-            variant="contained"
-            color='secondary'
-            disabled={loading}
-            > Upload</Button>
+            <Button
+              sx={{ my: 1, width: 300 }}
+              onClick={onCrop}
+              variant="contained"
+              color="secondary"
+              disabled={loading}
+            > 
+              Upload
+            </Button>
           </>
         )}
       </Grid>

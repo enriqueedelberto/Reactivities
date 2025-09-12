@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemButton, TextField, Typography, type TextFieldProps } from "@mui/material"
+import { Box, List, ListItemButton, TextField, Typography, type TextFieldProps } from "@mui/material"
 import { useState } from "react";
 import { useController, type FieldValues, type UseControllerProps } from "react-hook-form"
 
@@ -9,8 +9,8 @@ type Props<T extends FieldValues> = {
 export default function LocationInput<T extends FieldValues>(props: Props<T>){
 
     const {field, fieldState} = useController({...props});
-    const [loading, setLoading] = useState(false);
-    const [suggestions, setSuggestions] = useState<string[]>([]);   
+    const [loading ] = useState(false);
+    const [suggestions ] = useState<string[]>([]);   
     
 
   return (

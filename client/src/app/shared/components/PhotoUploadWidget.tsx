@@ -10,7 +10,7 @@ type Props = {
   loading: boolean;
 };
 
-export default function PhotoUploadWidget({ uploadPhoto, loading }) {
+export default function PhotoUploadWidget({ uploadPhoto, loading } : Props) {
   const [files, setFiles] = useState<object & { preview: string }[]>([]);
   const cropperRef = useRef<ReactCropperElement>(null);
 

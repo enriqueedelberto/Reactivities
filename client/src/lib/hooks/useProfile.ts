@@ -1,4 +1,4 @@
-import { useMutation, useMutationState, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { Photo, Profile, User } from "../types"
 import agent from "../api/agent";
 import { useMemo } from "react";

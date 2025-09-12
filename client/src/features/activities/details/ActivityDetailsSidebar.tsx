@@ -14,8 +14,7 @@ import type { Activity } from "../../../lib/types";
 type Props = {
   activity: Activity;
 };
-export default function ActivityDetailsSidebar({ activity }: Props) {
-  const following = true;
+export default function ActivityDetailsSidebar({ activity }: Props) { 
 
   return (
     <>

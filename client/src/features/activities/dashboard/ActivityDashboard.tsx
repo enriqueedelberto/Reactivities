@@ -1,17 +1,26 @@
 import { Grid } from "@mui/material";
-import ActivityList from "./ActivityList";  
+import ActivityList from "./ActivityList";
 import ActivityFilters from "./ActivityFilters";
 
-function ActivityDashboard( ) {
+function ActivityDashboard() { 
 
-  
   return (
     <Grid container spacing={3}>
       <Grid size={7}>
         <ActivityList />
+       
       </Grid>
-      <Grid size={4}>
-         <ActivityFilters />
+      <Grid 
+      size={4}
+      sx={{
+        position: 'sticky',
+        top: 112,
+        alignSelf: 'flex-start'
+      }}
+      
+      >
+        
+        <ActivityFilters />
       </Grid>
     </Grid>
   );

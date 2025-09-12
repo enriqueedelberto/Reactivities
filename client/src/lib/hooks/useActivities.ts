@@ -20,7 +20,7 @@ export const useActivities = (id?: string) => {
       });
       return response.data;
     },
-    staleTime: 1000*60*5,
+    staleTime: 1000 * 60 * 5,
     initialPageParam: null,
     getNextPageParam: (LastPage) => LastPage.nextCursor,
     enabled: !id && location.pathname === '/activities' && !!currentUser,
@@ -39,7 +39,7 @@ export const useActivities = (id?: string) => {
         }))
 
       }))
-         
+
     })
   });
 
@@ -143,7 +143,7 @@ export const useActivities = (id?: string) => {
   return {
     activitiesGroup,
     isFetchingNextPage,
-    fetchNextPage, 
+    fetchNextPage,
     hasNextPage,
     isLoading,
     updateActivity,

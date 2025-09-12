@@ -133,6 +133,7 @@ function ActivityForm() {
           <Button color="inherit" component={Link} to='/activities' variant="outlined">
             Cancel
           </Button>
+          
           <Button
             type="submit"
             color="success"

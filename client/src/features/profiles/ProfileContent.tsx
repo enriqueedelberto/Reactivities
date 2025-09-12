@@ -3,6 +3,7 @@ import {   useState } from 'react'
 import * as React from 'react';
 import ProfilePhotos from './ProfilePhotos';
 import ProfileAbout from './ProfileAbout';
+import ProfileFollowings from './ProfileFollowings';
 
 export default function ProfileContent() {
   const [value, setValue] = useState(0);
@@ -14,8 +15,8 @@ export default function ProfileContent() {
     {label: 'about', content: <ProfileAbout />},
     {label: 'photos', content: <ProfilePhotos />},
     {label: 'events', content: <div>events</div>},
-    {label: 'followers', content: <div>followers</div>},
-    {label: 'following', content: <div>following</div>},
+    {label: 'followers', content:  <ProfileFollowings activeTab={value} />},
+    {label: 'following', content: <ProfileFollowings activeTab={value} />},
   ];
 
   return (

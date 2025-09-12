@@ -11,20 +11,17 @@ public class DbInitializer
 
         var users = new List<User>
             {
+                new() { Id="bob-id", DisplayName = "Bob", UserName = "bob@example.com", Email = "bob@example.com" },
                 new()
                 {
-                    DisplayName = "Bob",
-                    UserName = "bob@example.com",
-                    Email = "bob@example.com"
-                },
-                new()
-                {
+                    Id="alice-id",
                     DisplayName = "Alice",
                     UserName = "alice@example.com",
                     Email = "alice@example.com"
                 },
                 new()
                 {
+                    Id="tom-id",
                     DisplayName = "Tom",
                     UserName = "tom@example.com",
                     Email = "tom@example.com"
